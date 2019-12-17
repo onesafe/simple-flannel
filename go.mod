@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/coreos/etcd v3.3.18+incompatible
+	github.com/coreos/go-iptables v0.4.5
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
