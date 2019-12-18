@@ -103,7 +103,7 @@ func init() {
 	// can flow into journald (if running under systemd)
 	err := flag.Set("logtostderr", "true")
 	if err != nil {
-		log.Error("flag.Set ", err.Error())
+		fmt.Print("flag.Set ", err.Error())
 	}
 
 	// Only copy the non file logging options from glog
@@ -117,8 +117,10 @@ func init() {
 	// now parse command line args
 	err = flannelFlags.Parse(os.Args[1:])
 	if err != nil {
-		log.Error("flannelFlags.Parse ", err.Error())
+		fmt.Print("flannelFlags.Parse ", err.Error())
 	}
+
+	fmt.Print("flannelFlags Parsed is : ", flannelFlags.Parsed())
 }
 
 func copyFlag(name string) {
@@ -128,7 +130,7 @@ func copyFlag(name string) {
 func usage() {
 	_, err := fmt.Fprintf(os.Stderr, "Usage: %s [OPTION]...\n", os.Args[0])
 	if err != nil {
-		log.Error("print usage ", err.Error())
+		fmt.Print("print usage ", err.Error())
 	}
 	flannelFlags.PrintDefaults()
 	os.Exit(0)
@@ -152,19 +154,20 @@ func newSubnetManager() (subnet.Manager, error) {
 }
 
 func main() {
+	fmt.Print("Start run simple-flanneld")
 	var err error
 
 	if opts.version {
 		_, err := fmt.Fprintln(os.Stderr, version.Version)
 		if err != nil {
-			log.Error("print version ", err.Error())
+			fmt.Print("print version %s", err.Error())
 		}
 		os.Exit(0)
 	}
 
 	err = flagutil.SetFlagsFromEnv(flannelFlags, "FLANNELD")
 	if err != nil {
-		log.Error("flagutil setFlagsFromEnv ", err.Error())
+		fmt.Print("flagutil setFlagsFromEnv ", err.Error())
 	}
 
 	// Validate flags
