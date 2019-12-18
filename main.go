@@ -120,7 +120,8 @@ func init() {
 		fmt.Print("flannelFlags.Parse ", err.Error())
 	}
 
-	flag.Parse()
+	// fix ERROR: logging before flag.Parse bug
+	flag.CommandLine = flannelFlags
 }
 
 func copyFlag(name string) {
