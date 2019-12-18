@@ -119,8 +119,6 @@ func init() {
 	if err != nil {
 		fmt.Print("flannelFlags.Parse ", err.Error())
 	}
-
-	fmt.Print("flannelFlags Parsed is : ", flannelFlags.Parsed())
 }
 
 func copyFlag(name string) {
@@ -154,7 +152,7 @@ func newSubnetManager() (subnet.Manager, error) {
 }
 
 func main() {
-	fmt.Print("Start run simple-flanneld")
+	fmt.Println("Start run simple-flanneld...")
 	var err error
 
 	if opts.version {
