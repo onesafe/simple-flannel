@@ -1,7 +1,6 @@
-package simple_flannel
+package main
 
 import (
-	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -17,6 +16,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"golang.org/x/net/context"
 
 	"github.com/onesafe/simple-flannel/pkg/ip"
 
@@ -29,6 +29,8 @@ import (
 
 	"github.com/onesafe/simple-flannel/subnet"
 	"github.com/onesafe/simple-flannel/subnet/etcdv2"
+
+	_ "github.com/onesafe/simple-flannel/backend/vxlan"
 )
 
 type flagSlice []string

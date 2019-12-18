@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/coreos/etcd v3.3.18+incompatible
+	github.com/coreos/flannel v0.11.0
 	github.com/coreos/go-iptables v0.4.5
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f
