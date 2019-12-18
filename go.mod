@@ -6,6 +6,7 @@ require (
 	github.com/coreos/etcd v3.3.18+incompatible
 	github.com/coreos/go-iptables v0.4.5
 	github.com/coreos/go-semver v0.3.0 // indirect
+	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/groupcache v0.0.0-20191027212112-611e8accdfc9 // indirect
@@ -14,6 +15,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.1.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.12.1 // indirect
+	github.com/joho/godotenv v1.3.0
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/json-iterator/go v1.1.8 // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect

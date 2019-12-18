@@ -10,8 +10,12 @@ github.com/coreos/etcd/pkg/tlsutil
 github.com/coreos/go-iptables/iptables
 # github.com/coreos/go-semver v0.3.0
 github.com/coreos/go-semver/semver
+# github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f
+github.com/coreos/pkg/flagutil
 # github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 github.com/golang/glog
+# github.com/joho/godotenv v1.3.0
+github.com/joho/godotenv
 # github.com/json-iterator/go v1.1.8
 github.com/json-iterator/go
 # github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421
