@@ -119,6 +119,8 @@ func init() {
 	if err != nil {
 		fmt.Print("flannelFlags.Parse ", err.Error())
 	}
+
+	flag.Parse()
 }
 
 func copyFlag(name string) {
