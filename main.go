@@ -155,7 +155,6 @@ func newSubnetManager() (subnet.Manager, error) {
 }
 
 func main() {
-	fmt.Println("Start run simple-flanneld...")
 	var err error
 
 	if opts.version {
@@ -165,6 +164,8 @@ func main() {
 		}
 		os.Exit(0)
 	}
+
+	fmt.Println("Start run simple flanneld ...")
 
 	err = flagutil.SetFlagsFromEnv(flannelFlags, "FLANNELD")
 	if err != nil {
