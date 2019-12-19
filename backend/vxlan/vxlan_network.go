@@ -68,6 +68,10 @@ func (nw *network) MTU() int {
 	return nw.ExtIface.Iface.MTU - encapOverhead
 }
 
+func (nw *network) Lease() *subnet.Lease {
+	return nw.SubnetLease
+}
+
 type vxlanLeaseAttrs struct {
 	VtepMAC hardwareAddr
 }

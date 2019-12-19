@@ -14,6 +14,11 @@ type ExternalInterface struct {
 	ExtAddr   net.IP
 }
 
+type SimpleNetwork struct {
+	SubnetLease *subnet.Lease
+	ExtIface    *ExternalInterface
+}
+
 type Backend interface {
 	RegisterNetwork(ctx context.Context, wg sync.WaitGroup, config *subnet.Config) (Network, error)
 }
