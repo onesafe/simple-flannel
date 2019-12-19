@@ -1,8 +1,8 @@
 package backend
 
 import (
-	"golang.org/x/net/context"
 	"github.com/onesafe/simple-flannel/subnet"
+	"golang.org/x/net/context"
 )
 
 type SimpleNetwork struct {

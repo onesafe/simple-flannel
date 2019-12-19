@@ -40,14 +40,15 @@ package vxlan
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/golang/glog"
 	"net"
 	"sync"
 
-	"golang.org/x/net/context"
+	log "github.com/golang/glog"
+
 	"github.com/onesafe/simple-flannel/backend"
 	"github.com/onesafe/simple-flannel/pkg/ip"
 	"github.com/onesafe/simple-flannel/subnet"
+	"golang.org/x/net/context"
 )
 
 func init() {
@@ -85,6 +86,16 @@ func newSubnetAttrs(publicIP net.IP, mac net.HardwareAddr) (*subnet.LeaseAttrs, 
 	}, nil
 }
 
+/**
+  核心功能, 根据config内容注册网络
+    config是事先写入etcd的内容
+    config内容 示例: {"Network":"172.30.0.0/16", "SubnetLen": 21, "Backend": {"Type": "vxlan"}}
+
+  功能:
+    1 创建vxlan设备
+    2 新建子网属性，通过子网属性获取租约
+    2 配置vxlan的设备ip为刚获取到的租约的子网IP
+*/
 func (be *VXLANBackend) RegisterNetwork(ctx context.Context, wg sync.WaitGroup, config *subnet.Config) (backend.Network, error) {
 	// Parse our configuration
 	cfg := struct {
@@ -166,4 +177,3 @@ func (hw *hardwareAddr) UnmarshalJSON(bytes []byte) error {
 	*hw = hardwareAddr(mac)
 	return nil
 }
-
