@@ -13,6 +13,7 @@ import (
 // of handling "fall-behind" logic where the history window has advanced too far
 // and it needs to diff the latest snapshot with its saved state and generate events
 /**
+  监控整个子网subnets
   ownLease 是节点自己的租约
 
   reset 可以理解为全量，就是刚启动的时候，拿到全量的subnets数据
@@ -153,6 +154,13 @@ func deleteLease(l []Lease, i int) []Lease {
 // and communicates addition/deletion events on receiver channel. It takes care
 // of handling "fall-behind" logic where the history window has advanced too far
 // and it needs to diff the latest snapshot with its saved state and generate events
+/**
+  监控节点所在的租约
+
+  for循环第一次的时候 cursoe为nil，返回的是Snapshot > 0， 添加事件，后面会更新租约的时间
+  for循环第二次、一直到第n次的时候，watch到的就是Event事件。如果是EventAdded，那么更新租约，否则EventRemoved，
+  说明租约被回收了，那么停掉flanneld进程，退出
+*/
 func WatchLease(ctx context.Context, sm Manager, sn ip.IP4Net, receiver chan Event) {
 	var cursor interface{}
 
