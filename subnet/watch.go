@@ -12,12 +12,22 @@ import (
 // and communicates addition/deletion events on receiver channel. It takes care
 // of handling "fall-behind" logic where the history window has advanced too far
 // and it needs to diff the latest snapshot with its saved state and generate events
+/**
+  ownLease 是节点自己的租约
+
+  reset 可以理解为全量，就是刚启动的时候，拿到全量的subnets数据
+  update 可以理解为增量，当启动后，拿到所有的subnets数据后。这个时候会监听事件
+*/
 func WatchLeases(ctx context.Context, sm Manager, ownLease *Lease, receiver chan []Event) {
 	lw := &leaseWatcher{
 		ownLease: ownLease,
 	}
 	var cursor interface{}
 
+	/**
+	  当cursor为nil时，也就是第一次for循环的时候，res.Event是0，拿到的是所有subnet信息，这个时候执行reset。
+	  第二次for循环的时候，cursor就有值了，这个时候主要是Watch subnets这个key的变化事件
+	*/
 	for {
 		res, err := sm.WatchLeases(ctx, cursor)
 		if err != nil {

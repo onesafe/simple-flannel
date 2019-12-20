@@ -39,6 +39,9 @@ func newNetwork(subnetMgr subnet.Manager, extIface *backend.ExternalInterface, d
 	return nw, nil
 }
 
+/**
+  监控整个subnets网络，处理ADD, DELETE事件。
+*/
 func (nw *network) Run(ctx context.Context) {
 	wg := sync.WaitGroup{}
 
