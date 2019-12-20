@@ -1,9 +1,10 @@
 package subnet
 
 import (
-	"github.com/onesafe/simple-flannel/pkg/ip"
 	"time"
+
 	log "github.com/golang/glog"
+	"github.com/onesafe/simple-flannel/pkg/ip"
 	"golang.org/x/net/context"
 )
 

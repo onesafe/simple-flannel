@@ -7,9 +7,9 @@ import (
 	"time"
 
 	etcd "github.com/coreos/etcd/client"
+	log "github.com/golang/glog"
 	"github.com/onesafe/simple-flannel/pkg/ip"
 	. "github.com/onesafe/simple-flannel/subnet"
-	log "github.com/golang/glog"
 	"golang.org/x/net/context"
 )
 
@@ -55,6 +55,10 @@ func (c watchCursor) String() string {
 	return strconv.FormatUint(c.index, 10)
 }
 
+/**
+  prevSubnet 是从/run/flannel/subnet.env文件里面读取到的FLANNEL_SUBNET
+  registry 是 EtcdSubnetRegistry
+*/
 func NewLocalManager(config *EtcdConfig, prevSubnet ip.IP4Net) (Manager, error) {
 	r, err := newEtcdSubnetRegistry(config, nil)
 	if err != nil {
@@ -120,6 +124,11 @@ func findLeaseBySubnet(leases []Lease, subnet ip.IP4Net) *Lease {
 	return nil
 }
 
+/**
+  1 根据IP地址，去etcd的Subnet里面找，如果找到了就reuse这个租约，更新ttl
+  2 根据/run/flannel/subnet.env里面的subnet，去etcd的subnet里面找租约，如果找到了就reuse这个租约，更新ttl
+  3 如果都没找到，那么就分配一个新的子网
+*/
 func (m *LocalManager) tryAcquireLease(ctx context.Context, config *Config, extIaddr ip.IP4, attrs *LeaseAttrs) (*Lease, error) {
 	leases, _, err := m.registry.getSubnets(ctx)
 	if err != nil {
@@ -370,4 +379,3 @@ func (m *LocalManager) Name() string {
 	}
 	return fmt.Sprintf("Etcd Local Manager with Previous Subnet: %s", previousSubnet)
 }
-

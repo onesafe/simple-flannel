@@ -13,8 +13,26 @@ type Config struct {
 	SubnetMin   ip.IP4
 	SubnetMax   ip.IP4
 	SubnetLen   uint
-	BackendType string          `json:"-"`
-	Backend     json.RawMessage `json:",omitempty"`
+	BackendType string `json:"-"`
+
+	/**
+	    用json.RawMessage的好处就是，你想解析什么样的格式都行
+	    比如现在想解析出Type
+	    var bt struct {
+	        Type string
+	    }
+
+	    想解析其他的结构也可以
+	    cfg := struct {
+		    VNI           int
+		    Port          int
+		    GBP           bool
+		    Learning      bool
+		    DirectRouting bool
+	    }
+	    都可以用Backend这个字段解析出来，只要你的Backend的值字符串里面有对应的属性
+	*/
+	Backend json.RawMessage `json:",omitempty"`
 }
 
 func parseBackendType(be json.RawMessage) (string, error) {

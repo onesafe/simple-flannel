@@ -45,6 +45,7 @@ type EtcdConfig struct {
 
 type etcdNewFunc func(c *EtcdConfig) (etcd.KeysAPI, error)
 
+// 实现Registry接口
 type etcdSubnetRegistry struct {
 	cliNewFunc   etcdNewFunc
 	mux          sync.Mutex
@@ -78,6 +79,7 @@ func newEtcdClient(c *EtcdConfig) (etcd.KeysAPI, error) {
 	return etcd.NewKeysAPI(cli), nil
 }
 
+// 根据etcdConfig来创建 EtcdSubnetRegistry， cliNewFunc默认传nil的进来
 func newEtcdSubnetRegistry(config *EtcdConfig, cliNewFunc etcdNewFunc) (Registry, error) {
 	r := &etcdSubnetRegistry{
 		etcdCfg:      config,
@@ -230,21 +232,11 @@ func (esr *etcdSubnetRegistry) watchSubnet(ctx context.Context, since uint64, sn
 	return evt, e.Node.ModifiedIndex, err
 }
 
+// 加锁的方式获取etcdClient
 func (esr *etcdSubnetRegistry) client() etcd.KeysAPI {
 	esr.mux.Lock()
 	defer esr.mux.Unlock()
 	return esr.cli
-}
-
-func (esr *etcdSubnetRegistry) resetClient() {
-	esr.mux.Lock()
-	defer esr.mux.Unlock()
-
-	var err error
-	esr.cli, err = newEtcdClient(esr.etcdCfg)
-	if err != nil {
-		panic(fmt.Errorf("resetClient: error recreating etcd client: %v", err))
-	}
 }
 
 func parseSubnetWatchResponse(resp *etcd.Response) (Event, error) {
@@ -284,6 +276,14 @@ func parseSubnetWatchResponse(resp *etcd.Response) (Event, error) {
 	}
 }
 
+/**
+  etcd的租约机制：
+    新建一个过期时间为120秒的租约。
+    新建key，并为该key指定租约
+    租约到期后，对应的key会被自动删除
+
+    在租约即将到期的时候，可续约
+*/
 func nodeToLease(node *etcd.Node) (*Lease, error) {
 	sn := ParseSubnetKey(node.Key)
 	if sn == nil {
