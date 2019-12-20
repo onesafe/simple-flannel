@@ -62,6 +62,12 @@ type leaseWatcher struct {
 	leases   []Lease
 }
 
+/**
+  把原来的租约删掉-EventRemoved事件，把新获得的租约添加进来-EventAdded事件
+  这其中涉及到的自己的租约，ownLease 不操作
+
+  如果原来的和新的租约有重叠的话，重叠的那部分不操作，不产生事件
+*/
 func (lw *leaseWatcher) reset(leases []Lease) []Event {
 	batch := []Event{}
 
@@ -145,9 +151,16 @@ func (lw *leaseWatcher) remove(lease *Lease) Event {
 	return Event{EventRemoved, *lease}
 }
 
-func deleteLease(l []Lease, i int) []Lease {
+/**
+  官方的这个方法，我觉得有bug，这里改一下
 	l[i] = l[len(l)-1]
 	return l[:len(l)-1]
+-->
+    l = append(l[:i], l[i+1:]...)
+*/
+func deleteLease(l []Lease, i int) []Lease {
+	l = append(l[:i], l[i+1:]...)
+	return l
 }
 
 // WatchLease performs a long term watch of the given network's subnet lease
@@ -157,7 +170,7 @@ func deleteLease(l []Lease, i int) []Lease {
 /**
   监控节点所在的租约
 
-  for循环第一次的时候 cursoe为nil，返回的是Snapshot > 0， 添加事件，后面会更新租约的时间
+  for循环第一次的时候 cursor为nil，返回的是Snapshot > 0， 添加事件，后面会更新租约的时间
   for循环第二次、一直到第n次的时候，watch到的就是Event事件。如果是EventAdded，那么更新租约，否则EventRemoved，
   说明租约被回收了，那么停掉flanneld进程，退出
 */
